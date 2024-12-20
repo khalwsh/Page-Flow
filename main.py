@@ -27,7 +27,7 @@ if __name__ == '__main__':
     pygame.display.set_caption('Library Management system')
 
     # creating the main window
-    WIDTH, HEIGHT = 800, 700
+    WIDTH, HEIGHT = 800, 600
     WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
     # to keep track which page we already in
