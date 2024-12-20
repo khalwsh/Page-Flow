@@ -231,6 +231,12 @@ def get_borrowed_books(cursor):
 
 def delete_user(id , cursor , connection):
     try:
+        cursor.execute(f"update books set status = 1 where id in (select book_id from borrowed where user_id = '{id}');" )
+
+        cursor.execute(
+            f"delete from borrowed WHERE user_id = '{id}';"
+        )
+
         cursor.execute(
             f"delete from phones where user_id = '{id}';"
         )
