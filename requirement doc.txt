@@ -1,0 +1,48 @@
+user:
+
+- user name
+- password
+- id
+- email
+- fname
+- lname
+- phones --> sperate table
+- Address
+- borrowed books ---> sperate table
+
+
+books:
+
+- id
+- author
+- title
+- status --> borrowed or not
+- pages
+
+phones:
+
+- user_id
+- phone number
+
+borrowed books:
+
+- user id
+- book id
+- starting date
+- ending date
+
+
+
+what the user can do ? 
+- see user profile
+- see available books
+- borrow a book
+- return a book
+
+what can admin do ?
+
+- see all available books
+- delete books from db
+- add books to db
+- see list of all users
+- see list of all users didn't return their book in time
