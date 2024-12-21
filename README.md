@@ -1,6 +1,9 @@
 # Library-Management-app
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/9687cf7d-cd06-445d-b328-d9c9b3124411" alt="logo" style="width:350px;">
+</div>
 
-![Library Management App](https://github.com/khalwsh/Library-Management-app/blob/main/assets/Library_background.jpeg)
+PageFlow – Smooth management of books and records.
 
 ## About the Project
 
