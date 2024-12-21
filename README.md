@@ -7,7 +7,7 @@ PageFlow – Smooth management of books and records.
 
 ## About the Project
 
-The Page Flow App is a comprehensive system designed to manage library resources efficiently. It allows librarians and users to handle book inventories, track borrowing and returns, and manage user accounts seamlessly.
+A streamlined library management system that simplifies book tracking, member management, and lending operations. The application features an intuitive interface for cataloging books, managing patron records, and processing checkouts/returns. Librarians can easily search the collection, generate reports on overdue items, and send automated notifications to members. Built with efficiency and user experience in mind, this system helps libraries transition from paper-based processes to a modern digital solution.
 
 first page giving the option to login as user or admin (hardcoded in the code and has access to administrate the database)
 ![image](https://github.com/user-attachments/assets/2010fd73-2b4a-4019-9ea0-e7e3adfa5743)
