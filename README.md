@@ -16,7 +16,8 @@ if you choosed to be admin then you should first login with admin password
 ![image](https://github.com/user-attachments/assets/17804583-395b-44d8-9608-06025c735d13)
 
 then you will have the following options
-![image](https://github.com/user-attachments/assets/b437e0ac-3eb4-4f76-8b46-4f974d4b2077)
+![image](https://github.com/user-attachments/assets/2dfa45e0-7d6b-4858-8512-72758d17b17b)
+
 
 if you choosed to (signup/login) as user then 
 ![image](https://github.com/user-attachments/assets/0523cb73-a952-4f7c-bacb-204c214bbe49)
@@ -28,7 +29,8 @@ then for user login
 ![image](https://github.com/user-attachments/assets/2807fbd9-5c9d-4bfb-b582-32138576145f)
 
 after that you are taken to user-options
-![image](https://github.com/user-attachments/assets/de860dde-43fd-4b37-a9e9-939109734cff)
+![image](https://github.com/user-attachments/assets/79b8e314-852a-47e4-b161-5a7d52d1a5ff)
+
 
 
 
