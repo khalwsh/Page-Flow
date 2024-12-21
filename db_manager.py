@@ -248,3 +248,29 @@ def delete_user(id , cursor , connection):
         print("this book is not currently in the library")
         print(f"An error occurred: {e}")
         connection.rollback()
+
+def warning_message(current_user_name, cursor):
+    cursor.execute("select id from user where user_name = %s", (current_user_name,))
+    user_id = cursor.fetchone()[0]
+    cursor.execute(f"""
+        SELECT books.id, books.title, books.author, books.status, books.pages,
+               borrowed.start_date, borrowed.end_date
+        FROM books 
+        JOIN borrowed ON books.id = borrowed.book_id
+        WHERE borrowed.user_id = '{user_id}' and borrowed.end_date < CURRENT_TIMESTAMP;
+    """)
+    books = []
+    for row in cursor.fetchall():
+        book_id, title, author, status, pages, start_date, end_date = row
+        book = Book(book_id, title, author, status, pages)
+        books.append([book, start_date, end_date])
+    return books
+
+def substr_search(text , cursor):
+    cursor.execute(f"select * from books where title LIKE '%{text}%';")
+    all = cursor.fetchall()
+    books = []
+    for book in all:
+        id , title, author, status, pages = book
+        books.append(Book(id, title, author, status, pages))
+    return books

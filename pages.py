@@ -218,6 +218,8 @@ def field_input_page(WINDOW , WIDTH , HEIGHT ,label_message, button_message):
 
 
 def draw_popout(screen, message):
+    first_background = pygame.image.load('assets/Library_background.jpeg').convert()
+    screen.blit(first_background, (0, 0))
     font = pygame.font.Font(None, 36)
 
     # Define constants
@@ -516,7 +518,8 @@ def loadFourthPage(WINDOW, HEIGHT, WIDTH, cursor, mydb):
         font = pygame.font.SysFont("Arial", 30)
         welcome_text = font.render("Welcome khalwsh", True, WHITE)
         welcome_text_position = welcome_text.get_rect(center=(WIDTH // 2, HEIGHT // 5))
-
+        search_for_book_rect = pygame.Rect(420, HEIGHT // 3 + 120, 230, 50)
+        search_for_user_rect = pygame.Rect(150, HEIGHT // 3 + 120, 230, 50)
         # Event loop
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -537,6 +540,25 @@ def loadFourthPage(WINDOW, HEIGHT, WIDTH, cursor, mydb):
                     if id == "prev":
                         continue
                     delete_book(id , cursor , mydb)
+                if search_for_book_rect.collidepoint(event.pos):
+                    text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book name", "enter")
+                    if text == "prev":
+                        continue
+                    while len(text) == 0:
+                        text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book name", "enter")
+                        if text == "prev":
+                            break
+                    if text == "prev":
+                        continue
+                    books = substr_search(text , cursor)
+                    text = ''
+                    for book in books:
+                        text += book.__str__()
+                        text += '-------------\n'
+                    if len(text) == 0:
+                        text = "No book with this name exist!"
+                    draw_popout(WINDOW , text)
+
                 if available_books_button.collidepoint(event.pos):
                     books = get_available_books(cursor)
                     text = ''
@@ -556,6 +578,17 @@ def loadFourthPage(WINDOW, HEIGHT, WIDTH, cursor, mydb):
                     if id == "prev":
                         continue
                     delete_user(id , cursor , mydb)
+                if search_for_user_rect.collidepoint(event.pos):
+                    text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter user name", "enter")
+                    if text == "prev":
+                        continue
+                    while len(text) == 0:
+                        text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter user name", "enter")
+                        if text == "prev":
+                            break
+                    if text == "prev":
+                        continue
+                    draw_popout(WINDOW , load_user(text , cursor).__str__())
                 if borrowed_books_button.collidepoint(event.pos):
                     books = get_borrowed_books(cursor)
                     text = ''
@@ -578,6 +611,16 @@ def loadFourthPage(WINDOW, HEIGHT, WIDTH, cursor, mydb):
         add_book_label = font.render("add book", True, BLACK)
         add_book_position = add_book_label.get_rect(center=add_book_button.center)
         WINDOW.blit(add_book_label, add_book_position)
+
+        pygame.draw.rect(WINDOW , WHITE, search_for_book_rect)
+        search_for_book_text = font.render("book search", True, BLACK)
+        search_for_book_text_rect = search_for_book_text.get_rect(center=search_for_book_rect.center)
+        WINDOW.blit(search_for_book_text, search_for_book_text_rect)
+
+        pygame.draw.rect(WINDOW, WHITE, search_for_user_rect)
+        search_for_user_text = font.render("user search", True, BLACK)
+        search_for_user_text_rect = search_for_user_text.get_rect(center=search_for_user_rect.center)
+        WINDOW.blit(search_for_user_text, search_for_user_text_rect)
 
         pygame.draw.rect(WINDOW, WHITE, remove_book_button)
         remove_book_label = font.render("remove book", True, BLACK)
@@ -1004,14 +1047,17 @@ def loadSeventhPage(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb):
     while True:
         first_background = pygame.image.load('assets/Library_background.jpeg').convert()
         WINDOW.blit(first_background, (0, 0))
+
         profile_rect = pygame.Rect(50, HEIGHT // 3, 230, 50)
         books_rect = pygame.Rect(300, HEIGHT // 3, 230, 50)
-        borrow_book_rect = pygame.Rect(300 , HEIGHT // 3 + 100, 230 , 50)
+        borrow_book_rect = pygame.Rect(300 , HEIGHT // 3 + 120, 230 , 50)
         borrowed_rect = pygame.Rect(550, HEIGHT // 3, 230, 50)
 
+        warning_rect = pygame.Rect(50, HEIGHT // 3 + 120, 230, 50)
         add_phone_rect = pygame.Rect(50, HEIGHT // 3 + 250, 230, 50)
         delete_phone_rect = pygame.Rect(300, HEIGHT // 3 + 250, 230, 50)
         return_book_rect = pygame.Rect(550, HEIGHT // 3 + 250, 230, 50)
+        search_for_book_rect = pygame.Rect(550, HEIGHT // 3 + 120, 230, 50)
 
         font = pygame.font.SysFont("Arial", 30)
         welcome_text = font.render(f"Welcome {user.username}", True, WHITE)
@@ -1074,6 +1120,36 @@ def loadSeventhPage(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb):
                         continue
                     return_book(user.id , text, cursor , mydb)
                     user = load_user(current_user_name, cursor)
+                if search_for_book_rect.collidepoint(event.pos):
+                    text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book name", "enter")
+                    if text == "prev":
+                        continue
+                    while len(text) == 0:
+                        text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book name", "enter")
+                        if text == "prev":
+                            break
+                    if text == "prev":
+                        continue
+                    books = substr_search(text , cursor)
+                    text = ''
+                    for book in books:
+                        text += book.__str__()
+                        text += '-------------\n'
+                    if len(text) == 0:
+                        text = "No book with this name exist!"
+                    draw_popout(WINDOW , text)
+                if warning_rect.collidepoint(event.pos):
+                    books = warning_message(current_user_name, cursor)
+                    text = "-- borrowing period has finished --"
+                    for book_and_date in books:
+                        book = book_and_date[0]
+                        start_date = book_and_date[1]
+                        end_date = book_and_date[2]
+                        text += book.__str__()
+                        text += f"start date: {start_date}\n"
+                        text += f"end date: {end_date}\n"
+                        text += '-------------\n'
+                    draw_popout(WINDOW, text)
 
                 if books_rect.collidepoint(event.pos):
                     books = get_available_books(cursor)
@@ -1109,6 +1185,16 @@ def loadSeventhPage(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb):
         borrow_book_text = font.render("borrow books", True, BLACK)
         borrow_text_rect = borrow_book_text.get_rect(center=borrow_book_rect.center)
         WINDOW.blit(borrow_book_text, borrow_text_rect)
+
+        pygame.draw.rect(WINDOW, WHITE, warning_rect)
+        warning_text = font.render("warning", True, BLACK)
+        warning_text_rect = warning_text.get_rect(center=warning_rect.center)
+        WINDOW.blit(warning_text, warning_text_rect)
+
+        pygame.draw.rect(WINDOW , WHITE, search_for_book_rect)
+        search_for_book_text = font.render("book search", True, BLACK)
+        search_for_book_text_rect = search_for_book_text.get_rect(center=search_for_book_rect.center)
+        WINDOW.blit(search_for_book_text, search_for_book_text_rect)
 
         pygame.draw.rect(WINDOW, WHITE, books_rect)
         books_text = font.render("available books", True, BLACK)
