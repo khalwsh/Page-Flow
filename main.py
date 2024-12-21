@@ -48,7 +48,6 @@ if __name__ == '__main__':
         elif PAGE_INDEX == 2:
             # Admin page
             x = loadSecondPage(WINDOW , HEIGHT , WIDTH)
-            print(x)
             if x == "prev":
                 previous_page()
             elif x:

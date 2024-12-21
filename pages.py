@@ -138,11 +138,11 @@ def field_input_page(WINDOW , WIDTH , HEIGHT ,label_message, button_message):
 
     # Title
     title_text = title_font.render(label_message, True, WHITE)
-    title_rect = title_text.get_rect(center=(WIDTH  // 2 + 60, HEIGHT // 6))
+    title_rect = title_text.get_rect(center=(WIDTH  // 2 + 120, HEIGHT // 6))
     WINDOW.blit(title_text, title_rect)
 
     # Password input box
-    input_box = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 3, 300, 50)
+    input_box = pygame.Rect(WIDTH // 2 - 20, HEIGHT // 3, 300, 50)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
@@ -150,7 +150,7 @@ def field_input_page(WINDOW , WIDTH , HEIGHT ,label_message, button_message):
     text = ''
 
     # Login button
-    login_button = pygame.Rect(WIDTH // 2 - 15, HEIGHT // 2 + 50, 150, 50)
+    login_button = pygame.Rect(WIDTH // 2 + 50, HEIGHT // 2 + 50, 150, 50)
 
     # Error message
     error_font = pygame.font.SysFont("Arial", 25)
