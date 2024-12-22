@@ -1,9 +1,17 @@
 import sys
-import pygame
-from colors import *
-from pages import *
+
 import mysql.connector
 from collections import deque
+
+import pygame
+
+from admin_functionality import admin_functonality
+from admin_login_page import admin_login
+from admin_user_page import admin_user_page
+from login_signup_user import signup_login_user
+from user_functionality import user_functionality
+from user_login import user_login
+from user_signup import user_signup
 
 # stack to track last page was opened
 stack = deque()
@@ -42,12 +50,12 @@ if __name__ == '__main__':
                 sys.exit()
 
         if PAGE_INDEX == 1:
-            PAGE_INDEX = loadFirstPage(WINDOW , HEIGHT , WIDTH)
+            PAGE_INDEX = admin_user_page(WINDOW , HEIGHT , WIDTH)
             stack.append(PAGE_INDEX)
 
         elif PAGE_INDEX == 2:
             # Admin page
-            x = loadSecondPage(WINDOW , HEIGHT , WIDTH)
+            x = admin_login(WINDOW , HEIGHT , WIDTH)
             if x == "prev":
                 previous_page()
             elif x:
@@ -57,7 +65,7 @@ if __name__ == '__main__':
 
         elif PAGE_INDEX == 3:
             # user login or signup page
-            x = loadThirdPage(WINDOW , HEIGHT , WIDTH)
+            x = signup_login_user(WINDOW , HEIGHT , WIDTH)
             if x == "prev":
                 previous_page()
             elif x == 2:
@@ -70,13 +78,13 @@ if __name__ == '__main__':
 
         elif PAGE_INDEX == 4:
             # admin functions
-            x = loadFourthPage(WINDOW , HEIGHT , WIDTH , cursor , mydb)
+            x = admin_functonality(WINDOW , HEIGHT , WIDTH , cursor , mydb)
             if x == "prev":
                 previous_page()
 
         elif PAGE_INDEX == 5:
             # user login process
-            current_user_name = loadFifthPage(WINDOW, HEIGHT, WIDTH , cursor)
+            current_user_name = user_login(WINDOW, HEIGHT, WIDTH , cursor)
             if current_user_name == "prev":
                 previous_page()
                 current_user_name = None
@@ -86,7 +94,7 @@ if __name__ == '__main__':
 
         elif PAGE_INDEX == 6:
             # user signup process
-            current_user_name = loadSixthPage(WINDOW, HEIGHT, WIDTH , cursor , mydb)
+            current_user_name = user_signup(WINDOW, HEIGHT, WIDTH , cursor , mydb)
             if current_user_name == "prev":
                 previous_page()
                 current_user_name = None
@@ -95,7 +103,7 @@ if __name__ == '__main__':
                 stack.append(PAGE_INDEX)
 
         elif PAGE_INDEX == 7:
-            x = loadSeventhPage(WINDOW , HEIGHT , WIDTH , current_user_name , cursor , mydb)
+            x = user_functionality(WINDOW , HEIGHT , WIDTH , current_user_name , cursor , mydb)
             if x == "prev":
                 previous_page()
 
