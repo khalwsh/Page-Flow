@@ -3,29 +3,27 @@ from book import *
 from User import *
 
 def check_user_exist(username, password, cursor):
-    cursor.execute(f"select user_name from user where user_name = \"{username}\" and password = \"{password}\"")
+    cursor.execute("SELECT user_name FROM user WHERE user_name = %s AND password = %s", (username, password))
     return len(cursor.fetchall()) == 1
-
 
 def insert_user(user_name_input_text, password_input_text, fname_input_text, lname_input_text, email_input_text,
                 Address_input_text, Phone_input_text, cursor, connection):
     try:
         cursor.execute(
-            f"INSERT INTO user (fname, lname, email, user_name, password , Address) "
-            f"VALUES ('{fname_input_text}', '{lname_input_text}', '{email_input_text}', '{user_name_input_text}', '{password_input_text}' , '{Address_input_text}');"
+            "INSERT INTO user (fname, lname, email, user_name, password, Address) VALUES (%s, %s, %s, %s, %s, %s)",
+            (fname_input_text, lname_input_text, email_input_text, user_name_input_text, password_input_text, Address_input_text)
         )
         connection.commit()
 
-        cursor.execute(f"SELECT id FROM user where user_name = '{user_name_input_text}';")
+        cursor.execute("SELECT id FROM user WHERE user_name = %s", (user_name_input_text,))
         user_id = cursor.fetchone()[0]
-        cursor.execute(f"INSERT INTO phones (user_id , phone_number) VALUES ('{user_id}', '{Phone_input_text}');")
+        cursor.execute("INSERT INTO phones (user_id, phone_number) VALUES (%s, %s)", (user_id, Phone_input_text))
         connection.commit()
 
         print(f"{cursor.rowcount} record(s) inserted successfully.")
     except Exception as e:
         print(f"An error occurred: {e}")
         connection.rollback()
-
 
 def check_create_user(user_name_text, password_text, fname_text, lname_text, email_text, Address_text, Phone_text,
                       cursor):
@@ -44,7 +42,7 @@ def check_create_user(user_name_text, password_text, fname_text, lname_text, ema
         return "Not complete"
 
     # user_name check
-    cursor.execute(f"select user_name from user where user_name = \"{user_name_text}\";")
+    cursor.execute("SELECT user_name FROM user WHERE user_name = %s", (user_name_text,))
     if len(cursor.fetchall()) != 0:
         return "User already exists"
 
@@ -69,7 +67,6 @@ def check_create_user(user_name_text, password_text, fname_text, lname_text, ema
     return None
 
 def load_user(current_user_name, cursor):
-    # Use parameterized query to prevent SQL injection
     cursor.execute("SELECT * FROM user WHERE user_name = %s", (current_user_name,))
     user_data = cursor.fetchone()
 
@@ -91,50 +88,44 @@ def load_user(current_user_name, cursor):
         book_data = cursor.fetchone()
         if book_data:
             ibook_id, title, author, status, pages = book_data
-            borrowed_books.append(Book(ibook_id, title, author, status, pages))  # Note: Changed 'book' to 'Book'
+            borrowed_books.append(Book(ibook_id, title, author, status, pages))
     return User(user_name, password, id, email, fname, lname, Address, phones, borrowed_books)
 
 def insert_phone(id, text, cursor, connection):
     try:
-        cursor.execute(f"select * from phones where phone_number = '{text}' and user_id = '{id}';")
+        cursor.execute("SELECT * FROM phones WHERE phone_number = %s AND user_id = %s", (text, id))
         if len(cursor.fetchall()) != 0:
             return
-        cursor.execute(
-            f"INSERT INTO phones (user_id, phone_number) VALUES ('{id}', '{text}');"
-        )
+        cursor.execute("INSERT INTO phones (user_id, phone_number) VALUES (%s, %s)", (id, text))
         connection.commit()
     except Exception as e:
         print(f"An error occurred: {e}")
         connection.rollback()
 
-def delete_phone(id , text , cursor , connection):
+def delete_phone(id, text, cursor, connection):
     try:
-        cursor.execute(
-            f"delete from phones WHERE phone_number = '{text}' AND user_id = '{id}';"
-        )
+        cursor.execute("DELETE FROM phones WHERE phone_number = %s AND user_id = %s", (text, id))
         connection.commit()
     except Exception as e:
         print(f"An error occurred: {e}")
         connection.rollback()
 
-def return_book(user_id , book_id , cursor , connection):
+def return_book(user_id, book_id, cursor, connection):
     try:
-        cursor.execute(
-            f"delete from borrowed WHERE user_id = '{user_id}' AND book_id = '{book_id}';"
-        )
+        cursor.execute("DELETE FROM borrowed WHERE user_id = %s AND book_id = %s", (user_id, book_id))
         connection.commit()
-        cursor.execute("update books set status = 1 where id = %s", (book_id,))
+        cursor.execute("UPDATE books SET status = 1 WHERE id = %s", (book_id,))
         connection.commit()
     except Exception as e:
-            print(f"An error occurred: {e}")
-            connection.rollback()
+        print(f"An error occurred: {e}")
+        connection.rollback()
 
 def get_available_books(cursor):
-    cursor.execute("select * from books where status = 1;")
+    cursor.execute("SELECT * FROM books WHERE status = 1")
     all = cursor.fetchall()
     books = []
     for book in all:
-        id , title, author, status, pages = book
+        id, title, author, status, pages = book
         books.append(Book(id, title, author, status, pages))
     return books
 
@@ -168,21 +159,17 @@ def borrow_book(user_id, book_id, cursor, connection):
         print(f"An error occurred: {e}")
         connection.rollback()
 
-def insert_book(title , author , pages, cursor, connection):
+def insert_book(title, author, pages, cursor, connection):
     try:
-        cursor.execute(
-            f"insert into books(title , author, pages) values ('{title}', '{author}', '{pages}');"
-        )
+        cursor.execute("INSERT INTO books(title, author, pages) VALUES (%s, %s, %s)", (title, author, pages))
         connection.commit()
     except Exception as e:
         print(f"An error occurred: {e}")
         connection.rollback()
 
-def delete_book(id , cursor , connection):
+def delete_book(id, cursor, connection):
     try:
-        cursor.execute(
-            f"delete from books where id = %s", (id,)
-        )
+        cursor.execute("DELETE FROM books WHERE id = %s", (id,))
         connection.commit()
     except Exception as e:
         print("this book is not currently in the library")
@@ -190,15 +177,15 @@ def delete_book(id , cursor , connection):
         connection.rollback()
 
 def get_all_users(cursor):
-    cursor.execute("select * from user")
+    cursor.execute("SELECT * FROM user")
     all = cursor.fetchall()
     user_list = []
     for user in all:
         id, fname, lname, email, user_name, password, Address = user
         password = len(password) * '*'
-        cursor.execute(f"select phone_number from phones WHERE user_id = '{id}';")
+        cursor.execute("SELECT phone_number FROM phones WHERE user_id = %s", (id,))
         phones = [phone[0] for phone in cursor.fetchall()]
-        cursor.execute(f"select book_id from borrowed WHERE user_id = '{id}';")
+        cursor.execute("SELECT book_id FROM borrowed WHERE user_id = %s", (id,))
         books_ids = cursor.fetchall()
         borrowed_books = []
         for book_id in books_ids:
@@ -212,13 +199,12 @@ def get_all_users(cursor):
     return user_list
 
 def get_borrowed_books(cursor):
-    # Get all borrowed books (status = 0 means borrowed)
     cursor.execute("""
         SELECT books.id, books.title, books.author, books.status, books.pages,
                borrowed.start_date, borrowed.end_date
         FROM books 
         JOIN borrowed ON books.id = borrowed.book_id
-        WHERE books.status = 0;
+        WHERE books.status = 0
     """)
 
     books = []
@@ -229,20 +215,13 @@ def get_borrowed_books(cursor):
 
     return books
 
-def delete_user(id , cursor , connection):
+
+def delete_user(id, cursor, connection):
     try:
-        cursor.execute(f"update books set status = 1 where id in (select book_id from borrowed where user_id = '{id}');" )
-
-        cursor.execute(
-            f"delete from borrowed WHERE user_id = '{id}';"
-        )
-
-        cursor.execute(
-            f"delete from phones where user_id = '{id}';"
-        )
-        cursor.execute(
-            f"delete from user where id = %s", (id,)
-        )
+        cursor.execute("UPDATE books SET status = 1 WHERE id IN (SELECT book_id FROM borrowed WHERE user_id = %s)", (id,))
+        cursor.execute("DELETE FROM borrowed WHERE user_id = %s", (id,))
+        cursor.execute("DELETE FROM phones WHERE user_id = %s", (id,))
+        cursor.execute("DELETE FROM user WHERE id = %s", (id,))
         connection.commit()
     except Exception as e:
         print("this book is not currently in the library")
@@ -250,15 +229,15 @@ def delete_user(id , cursor , connection):
         connection.rollback()
 
 def warning_message(current_user_name, cursor):
-    cursor.execute("select id from user where user_name = %s", (current_user_name,))
+    cursor.execute("SELECT id FROM user WHERE user_name = %s", (current_user_name,))
     user_id = cursor.fetchone()[0]
-    cursor.execute(f"""
+    cursor.execute("""
         SELECT books.id, books.title, books.author, books.status, books.pages,
                borrowed.start_date, borrowed.end_date
         FROM books 
         JOIN borrowed ON books.id = borrowed.book_id
-        WHERE borrowed.user_id = '{user_id}' and borrowed.end_date < CURRENT_TIMESTAMP;
-    """)
+        WHERE borrowed.user_id = %s AND borrowed.end_date < CURRENT_TIMESTAMP
+    """, (user_id,))
     books = []
     for row in cursor.fetchall():
         book_id, title, author, status, pages, start_date, end_date = row
@@ -266,11 +245,11 @@ def warning_message(current_user_name, cursor):
         books.append([book, start_date, end_date])
     return books
 
-def substr_search(text , cursor):
-    cursor.execute(f"select * from books where title LIKE '%{text}%';")
+def substr_search(text, cursor):
+    cursor.execute("SELECT * FROM books WHERE title LIKE %s", (f"%{text}%",))
     all = cursor.fetchall()
     books = []
     for book in all:
-        id , title, author, status, pages = book
+        id, title, author, status, pages = book
         books.append(Book(id, title, author, status, pages))
     return books
