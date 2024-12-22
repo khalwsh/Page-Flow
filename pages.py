@@ -1159,17 +1159,21 @@ def loadSeventhPage(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb):
                         text += '-------------\n'
                     draw_popout(WINDOW , text)
                 if borrow_book_rect.collidepoint(event.pos):
-                    text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book id", "enter")
-                    if text == "prev":
-                        continue
-                    while len(text) == 0:
+                    books = warning_message(current_user_name, cursor)
+                    if len(books):
+                        draw_popout(WINDOW, "you can't borrow books right now \nfirst you must pay your fines")
+                    else:
                         text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book id", "enter")
                         if text == "prev":
-                            break
-                    if text == "prev":
-                        continue
-                    borrow_book(user.id , text, cursor , mydb)
-                    user = load_user(current_user_name, cursor)
+                            continue
+                        while len(text) == 0:
+                            text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book id", "enter")
+                            if text == "prev":
+                                break
+                        if text == "prev":
+                            continue
+                        borrow_book(user.id , text, cursor , mydb)
+                        user = load_user(current_user_name, cursor)
 
 
 
