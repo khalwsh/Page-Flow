@@ -3,10 +3,76 @@ import pygame
 
 from colors import WHITE, BLACK
 from db_manager import load_user, insert_phone, delete_phone, return_book, warning_message, borrow_book, \
-    get_available_books, substr_search
+    get_available_books, substr_search, get_fine, apply_fine
 from utilities import draw_popout, field_input_page
 from validate_fields import check_phone
 
+import pygame
+from colors import WHITE, BLACK
+
+def fine(WINDOW, HEIGHT, WIDTH, amount):
+    """
+    Display a fine payment dialog with a message and yes/no buttons.
+
+    Args:
+        WINDOW (pygame.Surface): The Pygame window where the dialog will be drawn
+        HEIGHT (int): The height of the window
+        WIDTH (int): The width of the window
+        amount (float/int): The fine amount to be displayed
+
+    Returns:
+        str: 'yes' if user clicks yes button, 'no' if user clicks no button,
+             'prev' if user presses escape
+    """
+    while True:
+        # Draw background
+        background = pygame.image.load('assets/Library_background.jpeg').convert()
+        WINDOW.blit(background, (0, 0))
+
+        # Setup font
+        font = pygame.font.SysFont("Arial", 30)
+
+        # Create fine message
+        message = f"You should pay ${amount}"
+        message_text = font.render(message, True, WHITE)
+        message_rect = message_text.get_rect(center=(WIDTH // 2, HEIGHT // 4))
+
+        # Create buttons
+        yes_rect = pygame.Rect(WIDTH // 4, HEIGHT // 2, 150, 50)
+        no_rect = pygame.Rect(3 * WIDTH // 4 - 150, HEIGHT // 2, 150, 50)
+
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return "prev"
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if yes_rect.collidepoint(event.pos):
+                    return "yes"
+                if no_rect.collidepoint(event.pos):
+                    return "no"
+
+        # Draw message
+        WINDOW.blit(message_text, message_rect)
+
+        # Draw buttons
+        pygame.draw.rect(WINDOW, WHITE, yes_rect)
+        pygame.draw.rect(WINDOW, WHITE, no_rect)
+
+        # Draw button text
+        yes_text = font.render("Yes", True, BLACK)
+        no_text = font.render("No", True, BLACK)
+
+        yes_text_rect = yes_text.get_rect(center=yes_rect.center)
+        no_text_rect = no_text.get_rect(center=no_rect.center)
+
+        WINDOW.blit(yes_text, yes_text_rect)
+        WINDOW.blit(no_text, no_text_rect)
+
+        pygame.display.update()
 
 def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb):
     """
@@ -98,6 +164,7 @@ def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb)
 
 
                 if return_book_rect.collidepoint(event.pos):
+
                     text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book id", "enter")
                     if text == "prev":
                         continue
@@ -107,8 +174,16 @@ def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb)
                             break
                     if text == "prev":
                         continue
-                    return_book(user.id , text, cursor , mydb)
-                    user = load_user(current_user_name, cursor)
+
+                    x = get_fine(user.id , int(text) ,cursor)
+                    fine_respond = ''
+                    if x > 0:
+                        fine_respond = fine(WINDOW , HEIGHT , WIDTH , x)
+                    if fine_respond == "yes":
+                        apply_fine(user.id , int(text) , cursor , mydb)
+                        return_book(user.id , text, cursor , mydb)
+                        user = load_user(current_user_name, cursor)
+
                 if search_for_book_rect.collidepoint(event.pos):
                     text = field_input_page(WINDOW , HEIGHT , WIDTH , "enter book name", "enter")
                     if text == "prev":

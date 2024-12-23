@@ -3,9 +3,9 @@ import pygame
 
 from colors import BLACK, WHITE
 from db_manager import insert_book, delete_book, substr_search, get_available_books, get_all_users, delete_user, \
-    load_user, get_borrowed_books
+    load_user, get_borrowed_books, get_all_fines
 from utilities import adding_new_book, field_input_page, draw_popout
-
+from fines import *
 
 def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
     """
@@ -57,8 +57,9 @@ def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
         font = pygame.font.SysFont("Arial", 30)
         welcome_text = font.render("Welcome khalwsh", True, WHITE)
         welcome_text_position = welcome_text.get_rect(center=(WIDTH // 2, HEIGHT // 5))
-        search_for_book_rect = pygame.Rect(420, HEIGHT // 3 + 120, 230, 50)
-        search_for_user_rect = pygame.Rect(150, HEIGHT // 3 + 120, 230, 50)
+        search_for_book_rect = pygame.Rect(300, HEIGHT // 3 + 120, 230, 50)
+        search_for_user_rect = pygame.Rect(50, HEIGHT // 3 + 120, 230, 50)
+        all_fines_rect = pygame.Rect(550 , HEIGHT // 3 + 120, 230, 50)
         # Event loop
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -140,6 +141,13 @@ def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
                         text += f"end date: {end_date}\n"
                         text += '-------------\n'
                     draw_popout(WINDOW , text)
+                if all_fines_rect.collidepoint(event.pos):
+                    Fines = get_all_fines(cursor)
+                    text = ''
+                    for fine in Fines:
+                        text += fine.__str__()
+                        text += '-------------\n'
+                    draw_popout(WINDOW , text)
 
 
         # Draw welcome text
@@ -150,6 +158,11 @@ def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
         add_book_label = font.render("add book", True, BLACK)
         add_book_position = add_book_label.get_rect(center=add_book_button.center)
         WINDOW.blit(add_book_label, add_book_position)
+
+        pygame.draw.rect(WINDOW, WHITE, all_fines_rect)
+        all_fines_text = font.render("all fines", True, BLACK)
+        all_fines_text_rect = all_fines_text.get_rect(center=all_fines_rect.center)
+        WINDOW.blit(all_fines_text, all_fines_text_rect)
 
         pygame.draw.rect(WINDOW , WHITE, search_for_book_rect)
         search_for_book_text = font.render("book search", True, BLACK)
