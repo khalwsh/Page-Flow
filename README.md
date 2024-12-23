@@ -42,6 +42,7 @@ after that you are taken to user-options
 - **Borrowing System**: Track which user has borrowed which book and manage due dates.
 - **Search Functionality**: Search for books and users using various filters.
 - **Validation**: Ensure data integrity with field validation mechanisms.
+- **Applying Fines**: Ensure the books returned later than the date excpeted should get fine
 
 ## Built With
 
