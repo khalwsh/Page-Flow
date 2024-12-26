@@ -1,4 +1,4 @@
-# Page Flow
+# PageFlow - Library Management System
 <div align="center">
   <img src="https://github.com/user-attachments/assets/9687cf7d-cd06-445d-b328-d9c9b3124411" alt="logo" style="width:350px;">
 </div>
@@ -7,70 +7,106 @@ PageFlow – Smooth management of books and records.
 
 ## About the Project
 
-# Library Management System
-A Python-based library management system using Pygame for the GUI and MySQL for data storage.
+Python-based library management system using Pygame and MySQL.
 
-## Table of Contents
-- [Core Capabilities](#core-capabilities)
-- [Key Features](#key-features)
-- [Database Design](#database-design)
-  - [ER Diagram](#er-diagram)
-  - [Database Schema](#database-schema)
-  - [Constraints](#constraints)
-- [Installation & Setup](#Getting Started)
-- [Usage](#usage)
+## Features
 
-## Core Capabilities
-- User authentication and role-based access (Admin/User)
-- Book management (add, remove, search, track)
-- User management (registration, removal, search)
-- Borrowing system with due dates
-- Fine calculation for overdue books
-- Real-time book availability tracking
+### Admin
+- Book inventory management
+- User administration 
+- Borrowing oversight
+- Fine management
+- Search capabilities
 
-## Key Features
+### User
+- Account management
+- Book browsing/borrowing
+- Return tracking
+- Fine monitoring
 
-### Admin Features
-- Add new books to the library inventory
-- Remove books from the system
-- View all available books
-- Search books by title
-- View all registered users
-- Remove users from the system
-- Track borrowed books and return dates
-- Monitor and manage fines
-- Search for specific user details
+## Database Schema
 
-### User Features
-- Account creation and management
-- Browse available books
-- Borrow books with automated due dates
-- Return borrowed books
-- View personal borrowing history
-- Receive notifications for overdue books
-- Track personal fines
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    address VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT valid_email CHECK (email LIKE '%@%.%'),
+    CONSTRAINT valid_address CHECK (
+        address REGEXP '[0-9]' AND 
+        address REGEXP '[a-zA-Z]'
+    )
+);
 
-## Database Design
+CREATE TABLE books (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    is_available BOOLEAN DEFAULT true,
+    pages SMALLINT UNSIGNED,
+    isbn VARCHAR(13) UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-### ER Diagram
+CREATE TABLE phone_numbers (
+    user_id INT,
+    phone_number VARCHAR(15),
+    PRIMARY KEY (user_id, phone_number),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT valid_phone CHECK (
+        LENGTH(phone_number) IN (11, 13)
+    )
+);
+
+CREATE TABLE borrowed_books (
+    user_id INT,
+    book_id INT,
+    borrow_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    due_date TIMESTAMP NOT NULL,
+    PRIMARY KEY (user_id, book_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (book_id) REFERENCES books(id),
+    CONSTRAINT valid_due_date CHECK (
+        due_date > borrow_date
+    )
+);
+
+CREATE TABLE fines (
+    user_id INT,
+    amount DECIMAL(10,2) NOT NULL,
+    issued_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, issued_date),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT valid_fine CHECK (amount > 0)
+);
+```
+
+## ER Diagram
+
 ```mermaid
 erDiagram
-    USER ||--o{ PHONES : has
-    USER ||--o{ BORROWED : borrows
-    USER ||--o{ FINES : receives
-    BOOKS ||--o{ BORROWED : "is borrowed in"
+    USERS ||--o{ PHONE_NUMBERS : has
+    USERS ||--o{ BORROWED_BOOKS : borrows
+    USERS ||--o{ FINES : receives
+    BOOKS ||--o{ BORROWED_BOOKS : is_borrowed
     
-    USER {
+    USERS {
         int id PK
-        string fname
-        string lname
+        string first_name
+        string last_name
         string email
-        string user_name
+        string username
         string password
-        string Address
+        string address
+        timestamp created_at
     }
     
-    PHONES {
+    PHONE_NUMBERS {
         int user_id FK
         string phone_number
     }
@@ -79,76 +115,34 @@ erDiagram
         int id PK
         string title
         string author
-        boolean status
+        boolean is_available
         int pages
+        string isbn
+        timestamp created_at
     }
     
-    BORROWED {
+    BORROWED_BOOKS {
         int user_id FK
         int book_id FK
-        datetime start_date
-        datetime end_date
+        timestamp borrow_date
+        timestamp due_date
     }
     
     FINES {
         int user_id FK
-        float cost
-        datetime date
+        decimal amount
+        timestamp issued_date
     }
 ```
-### Database Schema
 
-#### User
-```sql
-CREATE TABLE user(
-	id INT PRIMARY KEY auto_increment,
-    fname varchar(50) NOT NULL, 
-    lname varchar(50) NOT NULL,
-    email varchar(50) NOT NULL,
-    user_name varchar(50) UNIQUE NOT NULL,
-    password varchar(50) NOT NULL 
-);
-```
-#### books
-```sql
-CREATE TABLE books(
-	id INT PRIMARY KEY auto_increment,
-    title varchar(50) NOT NULL, 
-    author varchar(50) NOT NULL,
-    status boolean default false,
-    pages smallint    
-);
-```
-#### phones
-```sql
-CREATE TABLE phones(
-	user_id INT , 
-    phone_number VARCHAR(15),
-    primary key (user_id , phone_number), 
-    FOREIGN KEY (user_id) references user(id)
-);
-```
-#### borrowed
-```sql
-CREATE TABLE borrowed(
-	user_id INT , 
-    book_id INT ,
-    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
-    end_date TIMESTAMP NOT NULL,
-    primary key (user_id , book_id),
-	FOREIGN KEY (user_id) references user(id),
-    FOREIGN KEY (book_id) references books(id)
-);
-```
-#### Fines
-```sql
-CREATE TABLE Fines(
-	user_id INT ,
-    cost INT ,
-    Date timestamp default current_timestamp,
-    primary key(user_id , Date)
-);
-```
+## Business Rules
+
+- Unique usernames required
+- Loan period: 10 days
+- Late fee: $5/day
+- Phone numbers: 11 or 13 digits
+- Passwords must meet security requirements
+- Required fields: username, password, name, email, address
 ### Constraints
 
 - **Users must have unique usernames**
