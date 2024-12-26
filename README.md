@@ -1,30 +1,34 @@
 # PageFlow - Library Management System
+
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/9687cf7d-cd06-445d-b328-d9c9b3124411" alt="logo" style="width:350px;">
+  <img src="https://github.com/user-attachments/assets/9687cf7d-cd06-445d-b328-d9c9b3124411" alt="PageFlow Logo" style="width:350px;">
 </div>
 
-PageFlow – Smooth management of books and records.
+### PageFlow – Where Books Meet Efficiency
 
-## About the Project
+PageFlow is your ultimate solution for seamless library management, combining the power of Python, the versatility of MySQL, and the interactive capabilities of Pygame. With a user-centric design and robust features, it’s perfect for handling book collections, user accounts, and borrowing activities—all while ensuring data integrity and scalability.
 
-Python-based library management system using Pygame and MySQL.
+PageFlow is a Python-based library management system designed for smooth management of books, users, and records. Whether you're an administrator or a bookworm, PageFlow has you covered!
 
-## Features
+### Key Technologies
+- **Python**: Backend programming
+- **MySQL**: Database management
+- **Pygame**: GUI framework for an engaging user interface
 
-### Admin
-- Book inventory management
-- User administration 
-- Borrowing oversight
-- Fine management
-- Search capabilities
+### 🚀 Features
+- **Book Inventory Management**: Add, update, or remove books with ease.
+- **User Administration**: Manage user accounts and permissions.
+- **Borrowing Oversight**: Monitor ongoing loans and returns.
+- **Fine Management**: Automate fine calculations for late returns.
+- **Advanced Search**: Find books and users with multi-criteria filters.
+- **Account Management**: Create and manage user accounts.
+- **Book Browsing & Borrowing**: Explore the catalog and borrow books.
+- **Return Tracking**: Stay on top of return deadlines.
+- **Fine Monitoring**: View and clear overdue fines.
 
-### User
-- Account management
-- Book browsing/borrowing
-- Return tracking
-- Fine monitoring
+---
 
-## ER Diagram
+### 📐 ER Diagram
 
 ```mermaid
 erDiagram
@@ -72,8 +76,7 @@ erDiagram
         timestamp issued_date
     }
 ```
-## Database Schema
-
+## 🗄 Database Schema
 ```sql
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -133,79 +136,35 @@ CREATE TABLE fines (
     CONSTRAINT valid_fine CHECK (amount > 0)
 );
 ```
-### Constraints
+## 🧠 Business Rules
+- **Unique Usernames:** Every user must have a unique username.
+- **Loan Period:** Books can be borrowed for 10 days.
+- **Late Fee:** $5 per day for overdue returns.
+- **Phone Numbers:** Must be 11 or 13 digits (with country code).
+- **Secure Passwords:** Passwords must meet security standards.
+- **Mandatory Fields:** Username, password, name, email, and address are required.
 
-- **Users must have unique usernames**
-- **Books can only be borrowed if they are available (status = 1)**
-- **Loan period is set to 10 days by default**
-- **Late returns incur a fine of $5 per day**
-- **Phone numbers must be either 11 digits or 13 digits (with country code)**
-- **Email addresses must contain '@'**
-- **Passwords must meet minimum security requirements**
-- **Address must contain both numbers and text**
-- **All core fields (username, password, name, email, address) are required**
-
-  
-## Business Rules
-
-- Unique usernames required
-- Loan period: 10 days
-- Late fee: $5/day
-- Phone numbers: 11 or 13 digits
-- Passwords must meet security requirements
-- Required fields: username, password, name, email, address
-
-
-## GUI
-
-### Initial Page
-First page offering login options for users or admins (admin credentials hardcoded)
-
+## 🎨 GUI Walkthrough
 ![First Page](https://github.com/user-attachments/assets/2010fd73-2b4a-4019-9ea0-e7e3adfa5743)
 
-### Admin Flow
-1. Admin Login Screen
 ![Admin Login](https://github.com/user-attachments/assets/17804583-395b-44d8-9608-06025c735d13)
 
-2. Admin Dashboard with Management Options
 ![Admin Options](https://github.com/user-attachments/assets/2dfa45e0-7d6b-4858-8512-72758d17b17b)
 
-### User Flow
-1. User Authentication Options
 ![User Auth Options](https://github.com/user-attachments/assets/0523cb73-a952-4f7c-bacb-204c214bbe49)
 
-2. User Registration Form
 ![User Registration](https://github.com/user-attachments/assets/84e14487-e7b3-4176-a167-2cb985c8affa)
 
-3. User Login Screen
 ![User Login](https://github.com/user-attachments/assets/2807fbd9-5c9d-4bfb-b582-32138576145f)
 
-4. User Dashboard
 ![User Dashboard](https://github.com/user-attachments/assets/79b8e314-852a-47e4-b161-5a7d52d1a5ff)
 
-## Features
-
-- **User Management**: Role-based account control system
-- **Book Inventory**: Complete book collection management
-- **Borrowing System**: Book checkout and return tracking
-- **Search Functionality**: Multi-filter search for books and users
-- **Validation**: Comprehensive data integrity checks
-- **Fine System**: Automated late return fee calculation
-
-## Built With
-
-- **Python**: Core programming language
-- **MySQL**: Database management
-- **Pygame**: GUI framework
-
-## Getting Started
-
+## 💻 Getting Started
 ### Prerequisites
-
-- Python 3.x ([Download](https://www.python.org/downloads/))
-- Pygame module
-- MySQL-connector
-- Local [database setup](https://github.com/khalwsh/Library-Management-app/tree/main/database)
+- **Python 3.x** 
+- **Pygame module**
+- **MySQL Connector**
+- **Local Database Setup**
 
 ### Installation
 
