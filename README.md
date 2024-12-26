@@ -24,6 +24,54 @@ Python-based library management system using Pygame and MySQL.
 - Return tracking
 - Fine monitoring
 
+## ER Diagram
+
+```mermaid
+erDiagram
+    USERS ||--o{ PHONE_NUMBERS : has
+    USERS ||--o{ BORROWED_BOOKS : borrows
+    USERS ||--o{ FINES : receives
+    BOOKS ||--o{ BORROWED_BOOKS : is_borrowed
+    
+    USERS {
+        int id PK
+        string first_name
+        string last_name
+        string email
+        string username
+        string password
+        string address
+        timestamp created_at
+    }
+    
+    PHONE_NUMBERS {
+        int user_id FK
+        string phone_number
+    }
+    
+    BOOKS {
+        int id PK
+        string title
+        string author
+        boolean is_available
+        int pages
+        string isbn
+        timestamp created_at
+    }
+    
+    BORROWED_BOOKS {
+        int user_id FK
+        int book_id FK
+        timestamp borrow_date
+        timestamp due_date
+    }
+    
+    FINES {
+        int user_id FK
+        decimal amount
+        timestamp issued_date
+    }
+```
 ## Database Schema
 
 ```sql
@@ -85,64 +133,6 @@ CREATE TABLE fines (
     CONSTRAINT valid_fine CHECK (amount > 0)
 );
 ```
-
-## ER Diagram
-
-```mermaid
-erDiagram
-    USERS ||--o{ PHONE_NUMBERS : has
-    USERS ||--o{ BORROWED_BOOKS : borrows
-    USERS ||--o{ FINES : receives
-    BOOKS ||--o{ BORROWED_BOOKS : is_borrowed
-    
-    USERS {
-        int id PK
-        string first_name
-        string last_name
-        string email
-        string username
-        string password
-        string address
-        timestamp created_at
-    }
-    
-    PHONE_NUMBERS {
-        int user_id FK
-        string phone_number
-    }
-    
-    BOOKS {
-        int id PK
-        string title
-        string author
-        boolean is_available
-        int pages
-        string isbn
-        timestamp created_at
-    }
-    
-    BORROWED_BOOKS {
-        int user_id FK
-        int book_id FK
-        timestamp borrow_date
-        timestamp due_date
-    }
-    
-    FINES {
-        int user_id FK
-        decimal amount
-        timestamp issued_date
-    }
-```
-
-## Business Rules
-
-- Unique usernames required
-- Loan period: 10 days
-- Late fee: $5/day
-- Phone numbers: 11 or 13 digits
-- Passwords must meet security requirements
-- Required fields: username, password, name, email, address
 ### Constraints
 
 - **Users must have unique usernames**
@@ -154,6 +144,17 @@ erDiagram
 - **Passwords must meet minimum security requirements**
 - **Address must contain both numbers and text**
 - **All core fields (username, password, name, email, address) are required**
+
+  
+## Business Rules
+
+- Unique usernames required
+- Loan period: 10 days
+- Late fee: $5/day
+- Phone numbers: 11 or 13 digits
+- Passwords must meet security requirements
+- Required fields: username, password, name, email, address
+
 
 ## GUI
 
