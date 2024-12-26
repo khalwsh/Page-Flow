@@ -174,4 +174,4 @@ git clone https://github.com/khalwsh/Library-Management-app.git
 cd Library-Management-app
 python main.py
 ```
-[demo](https://www.youtube.com/watch?v=0uzFFTsNlHk)
+[video demo](https://www.youtube.com/watch?v=0uzFFTsNlHk)
