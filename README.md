@@ -17,7 +17,7 @@ A Python-based library management system using Pygame for the GUI and MySQL for 
   - [ER Diagram](#er-diagram)
   - [Database Schema](#database-schema)
   - [Constraints](#constraints)
-- [Installation & Setup](#installation--setup)
+- [Installation & Setup](#Getting Started)
 - [Usage](#usage)
 
 ## Core Capabilities
