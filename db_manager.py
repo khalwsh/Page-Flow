@@ -259,16 +259,7 @@ def get_fine(user_id, book_id, cursor):
     """
     Calculate the fine amount for an overdue book.
     Fine is $5 per day after the end date.
-
-    Args:
-        user_id (int): The ID of the user
-        book_id (int): The ID of the borrowed book
-        cursor: Database cursor for executing queries
-
-    Returns:
-        float: The fine amount in dollars. Returns 0 if book is not overdue.
     """
-    # Get the end date for the borrowed book
     cursor.execute(
         "SELECT end_date FROM borrowed WHERE user_id = %s AND book_id = %s",
         (user_id, book_id)
@@ -276,17 +267,15 @@ def get_fine(user_id, book_id, cursor):
     result = cursor.fetchone()
 
     if not result:
-        return 0  # Book not found or not borrowed
+        return 0
 
     end_date = result[0]
 
-    # Ensure end_date is a datetime object
     if not isinstance(end_date, datetime):
-        return 0  # Handle unexpected data type
+        return 0
 
     current_date = datetime.now()
 
-    # Calculate days overdue
     days_overdue = (current_date - end_date).days
 
     # Only calculate fine if book is overdue
@@ -294,40 +283,27 @@ def get_fine(user_id, book_id, cursor):
         fine_amount = days_overdue * 5  # $5 per day
         return fine_amount
 
-    return 0  # Book is not overdue
+    return 0
 
 
 def apply_fine(user_id, book_id, cursor, connection):
     """
     Apply a fine to a user based on their overdue book.
     Records the fine in the fine table.
-
-    Args:
-        user_id (int): The ID of the user
-        book_id (int): The ID of the borrowed book
-        cursor: Database cursor for executing queries
-        connection: Database connection for committing transactions
-
-    Returns:
-        bool: True if fine was successfully applied, False otherwise
     """
     try:
-        # Calculate the fine amount
         fine_amount = get_fine(user_id, book_id, cursor)
 
         if fine_amount > 0:
-            # Insert the fine record into the fine table
             cursor.execute("INSERT INTO fines (user_id, cost) VALUES (%s, %s)",
                            (user_id, fine_amount))
 
-            # Commit the transaction
             connection.commit()
             return True
 
-        return False  # No fine needed
+        return False
 
     except Exception as e:
-        # Roll back in case of error
         connection.rollback()
         print(f"Error applying fine: {e}")
         return False

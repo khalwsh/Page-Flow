@@ -1,12 +1,5 @@
 class User:
     '''
-    what can admin do ?
-    - see all available books
-    - delete books from db
-    - add books to db
-    - see list of all users
-    - see list of all users didn't return their book in time
-
     what the user can do ?
     - see user profile
     - see available books
@@ -80,7 +73,6 @@ class User:
     def set_borrowed_books(self, borrowed_books):
         self.borrowed_books = borrowed_books
 
-    # String representation for developers (debugging)
     def __repr__(self):
         return (f"User(username='{self.username}', password='{self.password}', "
                 f"id='{self.id}', mail='{self.mail}', fname='{self.fname}', "

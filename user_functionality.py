@@ -13,35 +13,20 @@ from colors import WHITE, BLACK
 def fine(WINDOW, HEIGHT, WIDTH, amount):
     """
     Display a fine payment dialog with a message and yes/no buttons.
-
-    Args:
-        WINDOW (pygame.Surface): The Pygame window where the dialog will be drawn
-        HEIGHT (int): The height of the window
-        WIDTH (int): The width of the window
-        amount (float/int): The fine amount to be displayed
-
-    Returns:
-        str: 'yes' if user clicks yes button, 'no' if user clicks no button,
-             'prev' if user presses escape
     """
     while True:
-        # Draw background
         background = pygame.image.load('assets/Library_background.jpeg').convert()
         WINDOW.blit(background, (0, 0))
 
-        # Setup font
         font = pygame.font.SysFont("Arial", 30)
 
-        # Create fine message
         message = f"You should pay ${amount}"
         message_text = font.render(message, True, WHITE)
         message_rect = message_text.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
-        # Create buttons
         yes_rect = pygame.Rect(WIDTH // 4, HEIGHT // 2, 150, 50)
         no_rect = pygame.Rect(3 * WIDTH // 4 - 150, HEIGHT // 2, 150, 50)
 
-        # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -55,14 +40,11 @@ def fine(WINDOW, HEIGHT, WIDTH, amount):
                 if no_rect.collidepoint(event.pos):
                     return "no"
 
-        # Draw message
         WINDOW.blit(message_text, message_rect)
 
-        # Draw buttons
         pygame.draw.rect(WINDOW, WHITE, yes_rect)
         pygame.draw.rect(WINDOW, WHITE, no_rect)
 
-        # Draw button text
         yes_text = font.render("Yes", True, BLACK)
         no_text = font.render("No", True, BLACK)
 
@@ -79,24 +61,6 @@ def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb)
         This function handles the user interface for a library management system in Pygame.
         It allows the user to interact with various functionalities such as viewing their profile,
         borrowing and returning books, adding/removing phone numbers, and searching for books.
-
-        Args:
-            WINDOW (pygame.Surface): The Pygame window where the user interface is drawn.
-            HEIGHT (int): The height of the window.
-            WIDTH (int): The width of the window.
-            current_user_name (str): The username of the currently logged-in user.
-            cursor (sqlite3.Cursor): The database cursor for executing SQL queries.
-            mydb (sqlite3.Connection): The database connection object used to interact with the database.
-
-        Returns:
-            str: A string indicating the action to take next, such as 'prev' for going back or
-                 other action identifiers depending on the user's interaction.
-
-        Functionality:
-            - Displays the user's profile and options like borrowing books, adding/removing phone numbers.
-            - Allows the user to search for available books and display warnings for overdue borrowed books.
-            - Handles user input for borrowing and returning books, adding/removing phone numbers.
-            - Handles drawing and updating the user interface based on user interactions.
     """
     user = load_user(current_user_name, cursor)
     while True:
@@ -118,7 +82,6 @@ def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb)
         welcome_text = font.render(f"Welcome {user.username}", True, WHITE)
         welcome_rect = welcome_text.get_rect(center=(WIDTH // 2, HEIGHT // 5))
 
-        # event loop
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key ==  pygame.K_ESCAPE:
@@ -242,6 +205,7 @@ def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb)
 
 
         # draw
+
         WINDOW.blit(welcome_text, welcome_rect)
 
         pygame.draw.rect(WINDOW, WHITE, profile_rect)

@@ -6,7 +6,6 @@ class Fine:
         self.cost = cost
         self.date = date
 
-    # User ID property
     @property
     def user_id(self):
         return self._user_id
@@ -17,7 +16,6 @@ class Fine:
             raise ValueError("user_id must be a positive integer.")
         self._user_id = value
 
-    # Cost property
     @property
     def cost(self):
         return self._cost
@@ -28,7 +26,6 @@ class Fine:
             raise ValueError("cost must be a non-negative integer.")
         self._cost = value
 
-    # Date property
     @property
     def date(self):
         return self._date
@@ -49,10 +46,8 @@ class Fine:
             raise TypeError("date must be a string in 'YYYY-MM-DD' format or a datetime object.")
 
 
-    # String representation (user-friendly)
     def __str__(self):
         return f"user_id = {self.user_id}\ncost = {self.cost}$\ndate = {self.date}\n"
 
-    # Official representation (debugging)
     def __repr__(self):
         return f"Fine(user_id={self.user_id}, cost={self.cost}, date='{self.date}')"

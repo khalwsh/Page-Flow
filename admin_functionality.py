@@ -9,47 +9,17 @@ from fines import *
 
 def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
     """
-        admin_functionality(WINDOW, HEIGHT, WIDTH, cursor, mydb)
-
         Provides the main functionality page for the admin in the library management system.
         Allows the admin to perform various operations related to books and users.
-
-        Parameters:
-            WINDOW (pygame.Surface): The Pygame window surface where the interface is rendered.
-            HEIGHT (int): The height of the Pygame window.
-            WIDTH (int): The width of the Pygame window.
-            cursor (MySQLCursor): The database cursor to execute queries.
-            mydb (MySQLConnection): The database connection to commit changes.
-
-        Features:
-            - Add a new book to the library.
-            - Remove a book from the library by its ID.
-            - Search for books by their name (substring search).
-            - View a list of all available books.
-            - View a list of all registered users.
-            - Remove a user from the system by their ID.
-            - Search for user details by their name.
-            - View a list of all borrowed books with their borrowing and return dates.
-
-        Navigation:
-            - Press ESC to return to the previous page.
-
-        Database Integration:
-            - Uses various functions from `db_manager` for database operations like `insert_book`, `delete_book`, `substr_search`, and others.
-
-        Return:
-            str: Returns `"prev"` if the ESC key is pressed to navigate back.
-"""
+    """
     while True:
         library_background = pygame.image.load('assets/Library_background.jpeg').convert()
         WINDOW.blit(library_background, (0, 0))
 
-        # Top row button rectangles
         add_book_button = pygame.Rect(50, HEIGHT // 3, 230, 50)
         remove_book_button = pygame.Rect(300, HEIGHT // 3, 230, 50)
         available_books_button = pygame.Rect(550, HEIGHT // 3, 230, 50)
 
-        # Bottom row button rectangles
         all_users_button = pygame.Rect(50, HEIGHT // 3 + 250, 230, 50)
         remove_user_button = pygame.Rect(300, HEIGHT // 3 + 250, 230, 50)
         borrowed_books_button = pygame.Rect(550, HEIGHT // 3 + 250, 230, 50)
@@ -60,6 +30,7 @@ def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
         search_for_book_rect = pygame.Rect(300, HEIGHT // 3 + 120, 230, 50)
         search_for_user_rect = pygame.Rect(50, HEIGHT // 3 + 120, 230, 50)
         all_fines_rect = pygame.Rect(550 , HEIGHT // 3 + 120, 230, 50)
+
         # Event loop
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -150,10 +121,8 @@ def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
                     draw_popout(WINDOW , text)
 
 
-        # Draw welcome text
         WINDOW.blit(welcome_text, welcome_text_position)
 
-        # Draw top row buttons
         pygame.draw.rect(WINDOW, WHITE, add_book_button)
         add_book_label = font.render("add book", True, BLACK)
         add_book_position = add_book_label.get_rect(center=add_book_button.center)
@@ -184,7 +153,6 @@ def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):
         available_books_position = available_books_label.get_rect(center=available_books_button.center)
         WINDOW.blit(available_books_label, available_books_position)
 
-        # Draw bottom row buttons
         pygame.draw.rect(WINDOW, WHITE, all_users_button)
         all_users_label = font.render("all users", True, BLACK)
         all_users_position = all_users_label.get_rect(center=all_users_button.center)

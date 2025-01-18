@@ -13,7 +13,6 @@ from user_functionality import user_functionality
 from user_login import user_login
 from user_signup import user_signup
 
-# stack to track last page was opened
 stack = deque()
 
 # make database connection here
@@ -38,12 +37,9 @@ if __name__ == '__main__':
     WIDTH, HEIGHT = 800, 600
     WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 
-    # to keep track which page we already in
     while True:
-        # loading the image from assets and draw it
         first_background = pygame.image.load('assets/Library_background.jpeg').convert()
         WINDOW.blit(first_background, (0, 0))
-        # from any page I have option to close the program
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
