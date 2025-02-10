@@ -5,13 +5,13 @@ from collections import deque
 
 import pygame
 
-from admin_functionality import admin_functonality
-from admin_login_page import admin_login
-from admin_user_page import admin_user_page
-from login_signup_user import signup_login_user
-from user_functionality import user_functionality
-from user_login import user_login
-from user_signup import user_signup
+from admin.admin_functionality import admin_functonality
+from admin.admin_login_page import admin_login
+from admin.admin_user_page import admin_user_page
+from user.login_signup_user import signup_login_user
+from user.user_functionality import user_functionality
+from user.user_login import user_login
+from user.user_signup import user_signup
 
 stack = deque()
 
@@ -99,6 +99,8 @@ if __name__ == '__main__':
                 stack.append(PAGE_INDEX)
 
         elif PAGE_INDEX == 7:
+            if current_user_name is None:
+                continue
             x = user_functionality(WINDOW , HEIGHT , WIDTH , current_user_name , cursor , mydb)
             if x == "prev":
                 previous_page()

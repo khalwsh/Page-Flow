@@ -1,8 +1,8 @@
 import sys
 import pygame
 
-from colors import WHITE, BLACK
-from db_manager import check_user_exist
+from utilities.colors import WHITE, BLACK
+from database.db_manager import check_user_exist
 
 
 def user_login(WINDOW, HEIGHT, WIDTH, cursor):

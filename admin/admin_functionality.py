@@ -1,10 +1,10 @@
 import sys
 import pygame
 
-from colors import BLACK, WHITE
-from db_manager import insert_book, delete_book, substr_search, get_available_books, get_all_users, delete_user, \
+from utilities.colors import BLACK, WHITE
+from database.db_manager import insert_book, delete_book, substr_search, get_available_books, get_all_users, delete_user, \
     load_user, get_borrowed_books, get_all_fines
-from utilities import adding_new_book, field_input_page, draw_popout
+from utilities.utilities import adding_new_book, field_input_page, draw_popout
 from fines import *
 
 def admin_functonality(WINDOW, HEIGHT, WIDTH, cursor, mydb):

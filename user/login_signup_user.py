@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-from colors import BLACK, WHITE
+from utilities.colors import BLACK, WHITE
 def signup_login_user(WINDOW, HEIGHT, WIDTH):
     """
     display the page which make the user of the system to choose to login as admin or as user

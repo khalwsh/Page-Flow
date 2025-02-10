@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-from colors import BLACK, WHITE
+from utilities.colors import BLACK, WHITE
 def admin_user_page(WINDOW, HEIGHT, WIDTH):
     """
         Displays the initial page of the application where the user selects between the Admin and User functionalities.

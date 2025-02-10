@@ -1,8 +1,8 @@
 import sys
 import pygame
 
-from colors import WHITE, BLACK
-from db_manager import insert_user, check_create_user
+from utilities.colors import WHITE, BLACK
+from database.db_manager import insert_user, check_create_user
 
 
 def user_signup(WINDOW, HEIGHT, WIDTH, cursor, mydb):
@@ -184,18 +184,18 @@ def user_signup(WINDOW, HEIGHT, WIDTH, cursor, mydb):
                                                    lname_input_text, email_input_text, Address_input_text,
                                                    Phone_input_text, cursor)
                     if error_text is None:
-                        insert_user(user_name_input_text, password_input_text, fname_input_text, lname_input_text,
-                                    email_input_text, Address_input_text, Phone_input_text, cursor, mydb)
-                        return user_name_input_text
+                        if insert_user(user_name_input_text, password_input_text, fname_input_text, lname_input_text,
+                                    email_input_text, Address_input_text, Phone_input_text, cursor, mydb):
+                            return user_name_input_text
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if signup_button.collidepoint(event.pos):
                     error_text = check_create_user(user_name_input_text, password_input_text, fname_input_text,
                                                    lname_input_text, email_input_text, Address_input_text,
                                                    Phone_input_text, cursor)
                     if error_text is None:
-                        insert_user(user_name_input_text, password_input_text, fname_input_text, lname_input_text,
-                                    email_input_text, Address_input_text, Phone_input_text, cursor, mydb)
-                        return user_name_input_text
+                        if insert_user(user_name_input_text, password_input_text, fname_input_text, lname_input_text,
+                                    email_input_text, Address_input_text, Phone_input_text, cursor, mydb):
+                            return user_name_input_text
 
         # Clear screen
         first_background = pygame.image.load('assets/Library_background.jpeg').convert()

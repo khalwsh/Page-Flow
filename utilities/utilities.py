@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-from colors import WHITE, BLACK
+from utilities.colors import WHITE, BLACK
 def adding_new_book(WINDOW, HEIGHT, WIDTH):
     """
         adding_new_book gui

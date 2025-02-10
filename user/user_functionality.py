@@ -1,14 +1,12 @@
 import sys
 import pygame
 
-from colors import WHITE, BLACK
-from db_manager import load_user, insert_phone, delete_phone, return_book, warning_message, borrow_book, \
+from utilities.colors import WHITE, BLACK
+from database.db_manager import load_user, insert_phone, delete_phone, return_book, warning_message, borrow_book, \
     get_available_books, substr_search, get_fine, apply_fine
-from utilities import draw_popout, field_input_page
-from validate_fields import check_phone
+from utilities.utilities import draw_popout, field_input_page
+from utilities.validate_fields import check_phone
 
-import pygame
-from colors import WHITE, BLACK
 
 def fine(WINDOW, HEIGHT, WIDTH, amount):
     """
@@ -63,6 +61,7 @@ def user_functionality(WINDOW, HEIGHT, WIDTH, current_user_name , cursor , mydb)
         borrowing and returning books, adding/removing phone numbers, and searching for books.
     """
     user = load_user(current_user_name, cursor)
+
     while True:
         first_background = pygame.image.load('assets/Library_background.jpeg').convert()
         WINDOW.blit(first_background, (0, 0))

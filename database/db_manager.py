@@ -1,8 +1,9 @@
-from fines import Fine
-from validate_fields import *
-from book import *
-from User import *
+from fines.fines import Fine
+from utilities.validate_fields import *
+from books.book import *
+from user.User import *
 from datetime import datetime
+
 def check_user_exist(username, password, cursor):
     cursor.execute("SELECT user_name FROM user WHERE user_name = %s AND password = %s", (username, password))
     return len(cursor.fetchall()) == 1
@@ -22,9 +23,12 @@ def insert_user(user_name_input_text, password_input_text, fname_input_text, lna
         connection.commit()
 
         print(f"{cursor.rowcount} record(s) inserted successfully.")
+        return True
     except Exception as e:
         print(f"An error occurred: {e}")
         connection.rollback()
+
+    return False
 
 def check_create_user(user_name_text, password_text, fname_text, lname_text, email_text, Address_text, Phone_text,
                       cursor):

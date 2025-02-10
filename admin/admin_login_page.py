@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-from colors import BLACK, WHITE
+from utilities.colors import BLACK, WHITE
 def admin_login(WINDOW, HEIGHT, WIDTH):
     """
         Handles the login interface for the admin in a Pygame application.
